@@ -29,7 +29,17 @@ phases:
 
   post_build:
     commands:
-      - echo "Updating Lambda function code"
+      - echo "Updating index-photos Lambda in current account"
       - aws lambda update-function-code --function-name index-photos --zip-file fileb://lambda-functions/index-photos/index-photos.zip
+
+      - echo "Assuming cross-account role for search-photos"
+      - CREDS=$(aws sts assume-role --role-arn arn:aws:iam::550045800765:role/CrossAccountLambdaDeployRole --role-session-name deploy-search)
+
+      - export AWS_ACCESS_KEY_ID=$(echo $CREDS | python -c "import sys,json; print(json.load(sys.stdin)['Credentials']['AccessKeyId'])")
+      - export AWS_SECRET_ACCESS_KEY=$(echo $CREDS | python -c "import sys,json; print(json.load(sys.stdin)['Credentials']['SecretAccessKey'])")
+      - export AWS_SESSION_TOKEN=$(echo $CREDS | python -c "import sys,json; print(json.load(sys.stdin)['Credentials']['SessionToken'])")
+
+      - echo "Updating search-photos Lambda in teammate account"
       - aws lambda update-function-code --function-name search-photos --zip-file fileb://lambda-functions/search-photos/search-photos.zip
+
       - echo "P1 deployment complete"
