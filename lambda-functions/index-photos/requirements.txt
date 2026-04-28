@@ -1,2 +1,2 @@
 # No external dependencies required.
-# Uses boto3, botocore, and urllib3 available in the AWS Lambda Python runtime.
+# Uses boto3, botocore, and urllib3 available in the AWS Lambda Python runtime.ter
