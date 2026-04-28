@@ -5,23 +5,31 @@ phases:
     runtime-versions:
       python: 3.12
 
-  pre_build:
-    commands:
-      - echo "Preparing index-photos Lambda deployment"
-      - cd lambda-functions/index-photos
-      - mkdir -p package
-      - pip install -r requirements.txt -t package || true
-
   build:
     commands:
-      - echo "Packaging Lambda function"
+      - echo "Packaging index-photos Lambda"
+      - cd lambda-functions/index-photos
+      - rm -rf package index-photos.zip
+      - mkdir -p package
+      - pip install -r requirements.txt -t package || true
       - cp lambda_function.py package/
       - cd package
       - zip -r ../index-photos.zip .
+      - cd ../../..
+
+      - echo "Packaging search-photos Lambda"
+      - cd lambda-functions/search-photos
+      - rm -rf package search-photos.zip
+      - mkdir -p package
+      - pip install -r requirements.txt -t package || true
+      - cp lambda_function.py package/
+      - cd package
+      - zip -r ../search-photos.zip .
+      - cd ../../..
 
   post_build:
     commands:
       - echo "Updating Lambda function code"
-      - cd ..
-      - aws lambda update-function-code --function-name index-photos --zip-file fileb://index-photos.zip
-      - echo "Deployment complete"
+      - aws lambda update-function-code --function-name index-photos --zip-file fileb://lambda-functions/index-photos/index-photos.zip
+      - aws lambda update-function-code --function-name search-photos --zip-file fileb://lambda-functions/search-photos/search-photos.zip
+      - echo "P1 deployment complete"
