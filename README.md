@@ -4,6 +4,11 @@
 
 `smart-photo-search-aws` is a serverless demo application for uploading photos, extracting labels with AI, and searching images using natural language.
 
+## Contributors
+- Gurjeet Kaur (gk2845)
+- Vandana Rawat (vr2645)
+
+  
 The project uses AWS services including:
 
 - Amazon S3 for photo storage
