@@ -237,4 +237,4 @@ function normalizePhotoResponse(data) {
 function setStatus(element, message, type) {
   element.textContent = message;
   element.className = `status ${type}`;
-}
+}# demo
